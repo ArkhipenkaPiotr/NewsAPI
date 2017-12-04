@@ -16,18 +16,17 @@ namespace NewsApi.Controllers
         {
             repository = newsRepository; 
         }
-        // GET api/values
+
         [HttpGet]
-        public List<News> Get()
+        public async Task<IEnumerable<News>> Get()
         {
-            return repository.getNews();
+            return await repository.getNews();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public News Get(int id)
+        public async Task<News> Get(int id)
         {
-            return repository.Get(id);
+            return await repository.Get(id);
         }
 
         [HttpPost]
