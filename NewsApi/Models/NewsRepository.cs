@@ -21,12 +21,12 @@ namespace NewsApi.Models
             _configuration = configuration;
         }
 
-        public async Task Create(News news)
+        public async Task<int> Create(News news)
         {
             using (IDbConnection db = new MySqlConnection(_configuration["MySetting"]))
             {
-                var sqlQuery = "INSERT INTO news (header, date_time, content, author, category) VALUES (@header,@date_time, @content,@author,@category)";
-                await db.ExecuteAsync(sqlQuery, news);
+                var sqlQuery = "INSERT INTO news (header, datetime, content, author, category) VALUES (@header,@datetime, @content,@author,@category)";
+                return await db.ExecuteAsync(sqlQuery, news);
             }
         }
 
@@ -47,20 +47,20 @@ namespace NewsApi.Models
             }
         }
 
-        public async Task<IEnumerable<News>> getNews()
+        public async Task<IEnumerable<News>> GetNews(int startnum, string category)
         {
             using (IDbConnection db = new MySqlConnection(_configuration["MySetting"]))
             {
-                return await db.QueryAsync<News>("SELECT * FROM news");
+                return await db.QueryAsync<News>("SELECT * FROM news where category='"+category+"' Order by datetime desc limit "+startnum+", 5");
             }
         }
 
-        public async Task Update(News news)
+        public async Task<int> Update(News news)
         {
             using (IDbConnection db = new MySqlConnection(_configuration["MySetting"]))
             {
                 var sqlQuery = "UPDATE news SET header = @header, content = @content WHERE id = @id";
-                await db.ExecuteAsync(sqlQuery, news);
+                return await db.ExecuteAsync(sqlQuery, news);
             }
         }
     }

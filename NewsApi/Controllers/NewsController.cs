@@ -18,27 +18,28 @@ namespace NewsApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<News>> Get()
+        public async Task<IEnumerable<News>> GetByPage(int startnum, string category)
         {
-            return await repository.getNews();
+            return await repository.GetNews(startnum, category);
         }
 
         [HttpGet("{id}")]
-        public async Task<News> Get(int id)
+        public async Task<News> GetById(int id)
         {
             return await repository.Get(id);
         }
 
         [HttpPost]
-        public async Task Create([FromBody] News news)
+        public async Task<int> Create([FromBody] News news)
         {
-            await repository.Create(news);
+            news.DateTime = DateTime.Now;
+            return await repository.Create(news);
         }
 
         [HttpPut]
-        public async Task Update([FromBody] News news)
+        public async Task<int> Update([FromBody] News news)
         {
-            await repository.Update(news);
+            return await repository.Update(news);
         }
 
         [HttpDelete("{id}")]
